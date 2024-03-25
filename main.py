@@ -21,8 +21,13 @@ def generate_fullname():
     """
     Esta función genera un nombre aleatorio a partir de una lista de nombres y apellidos.
     """
-    nombres = ["Juan", "Carlos", "Luis", "Pedro", "Miguel", "Pablo", "Javier", "Francisco", "Jose", "Antonio"]
-    apellidos = ["Gomez", "Tilin", "Lopez", "Martinez", "Gonzalez", "Perez", "Sanchez", "Diaz", "Romero"]
+    nombres = [
+        "Juan", "Carlos", "Luis", "Pedro", "Miguel", "Pablo", 
+        "Javier", "Francisco", "Jose", "Antonio"
+        ]
+    apellidos = [
+        "Gomez", "Tilin", "Lopez", "Martinez", "Gonzalez", "Perez", "Sanchez", "Diaz", "Romero"
+        ]
     return f"{random.choice(nombres)}{random.choice(apellidos)}"
 
 # Función para generar caracteres aleatorios
@@ -112,7 +117,11 @@ class CreadorDeCuentas:
         "seUso": "No",
         "nivel": "50-",
         "ultimoUso": f"{time.strftime('%d/%m/%Y')} {time.strftime('%H:%M:%S')}",
-        "cookies": [{"name": cookie["name"], "value": cookie["value"], "domain": cookie["domain"]} for cookie in cookies]
+        "cookies": [
+            {"name": cookie["name"],
+             "value": cookie["value"], 
+             "domain": cookie["domain"]} 
+            for cookie in cookies]
     }
        # Leer los datos existentes del archivo
         try:
@@ -152,7 +161,9 @@ class CreadorDeCuentas:
         # Comprobar si el inicio de sesión fue exitoso
         # (Reemplaza esto con la lógica adecuada para tu caso)
         WebDriverWait(self.driver, 120).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="right-navigation-header"]/div[2]/ul/div[2]/a'))
+            EC.presence_of_element_located((
+                By.XPATH, '//*[@id="right-navigation-header"]/div[2]/ul/div[2]/a'
+                ))
         )
         time.sleep(1)
 
@@ -169,8 +180,13 @@ class CreadorDeCuentas:
         # Buscar y seguir al usuario
         try:
             # Buscar elementos
-            desplegar_opciones = self.driver.find_element(By.XPATH, value="/html/body/div[3]/main/div[2]/div[2]/div/div[1]/div/div/div/div[3]/div/button")
-            boton_seguir = self.driver.find_element(By.XPATH, value='//*[@id="profile-header-more rbx-menu-item"]/div/ul/li[1]/a')
+            desplegar_opciones = self.driver.find_element(
+                By.XPATH,
+                value="/html/body/div[3]/main/div[2]/div[2]/div/div[1]/div/div/div/div[3]/div/button"
+                )
+            boton_seguir = self.driver.find_element(
+                By.XPATH, value='//*[@id="profile-header-more rbx-menu-item"]/div/ul/li[1]/a'
+                )
         except NoSuchElementException as e:
             print(f"Error al encontrar elementos para seguir: {e}")
             return False
@@ -197,14 +213,20 @@ class CreadorDeCuentas:
         time.sleep(2)
 
         # Campo para introducir el código
-        input_codigo = self.driver.find_element(By.XPATH, value='//*[@id="confirm-code-container"]/div/div/div/form/div[1]/input')
-        boton_enviar = self.driver.find_element(By.XPATH, value="/html/body/div[3]/main/div[2]/div/div/div/div/form/div[2]/button")
+        input_codigo = self.driver.find_element(
+            By.XPATH, value='//*[@id="confirm-code-container"]/div/div/div/form/div[1]/input'
+            )
+        boton_enviar = self.driver.find_element(
+            By.XPATH, value="/html/body/div[3]/main/div[2]/div/div/div/div/form/div[2]/button"
+            )
         # Introducir el código
         input_codigo.send_keys(codigo)
         time.sleep(1)
         boton_enviar.click()
         time.sleep(1)
-        boton_confirmar = self.driver.find_element(By.XPATH, value="/html/body/div[3]/main/div[2]/div/div/div/div/div[3]/button[2]")
+        boton_confirmar = self.driver.find_element(
+            By.XPATH, value="/html/body/div[3]/main/div[2]/div/div/div/div/div[3]/button[2]"
+            )
         if boton_confirmar.is_enabled():
             boton_confirmar.click()
         else:
@@ -269,7 +291,7 @@ def menu():
             for usuario in usuarios_existentes:
                 print(f"{num_lista}. Usuario: {usuario['username']} Se uso: {usuario['seUso']} Nivel: {usuario['nivel']}")
             indice_cuenta = input("Seleccione una cuenta: ")
-            if indice_cuenta == "" and indice_cuenta not in range(1, len(usuarios_existentes) + 1 and not indice_cuenta.isdigit()):
+            if indice_cuenta == "" or indice_cuenta not in range(1, len(usuarios_existentes) + 1) or not indice_cuenta.isdigit():
                 print("No se ingresó un número válido")
                 return
             print("Iniciando sesión...")
@@ -293,6 +315,7 @@ def menu():
             for usuario in usuarios_existentes:
                 if usuario["seUso"] == "No":
                     usuarios_sin_usar += 1
+            # Mostrar los usuarios no usados
             print(f"Usuarios no usados: {usuarios_sin_usar}")
             usuario_seleccionado = None
             for usuario in usuarios_existentes:
@@ -309,8 +332,6 @@ def menu():
                 return
             print("Iniciando sesión...")
             crear = CreadorDeCuentas()
-
-            usuario_seleccionado = next((usuario for usuario in usuarios_existentes if usuario["username"] == nombre_cuenta), None)
             # Comezar el proceso de inicio de sesión
             if crear.login(usuario_seleccionado["cookies"]):
                 if crear.inicio_de_secion_rapido(codigo):
@@ -342,12 +363,16 @@ def menu():
                                 print(f"Usuario {usuario_seleccionado['username']} ha tirado fruta")
                             if tiro_fruta == "no":
                                 usuario_seleccionado["seUso"] = "No"
-                                print(f"Usuario {usuario_seleccionado['username']} no ha tirado fruta")
+                                print(
+                                    f"Usuario {usuario_seleccionado['username']} no ha tirado fruta"
+                                    )
                         except ValueError:
                             print("Opción no válida")
 
                 else:
-                    print(f"Error al iniciar sesión con el usuario {usuario_seleccionado['username']}")
+                    print(
+                        f"Error al iniciar sesión con el usuario {usuario_seleccionado['username']}"
+                        )
             else:
                 print(f"Error al iniciar sesión con el usuario {usuario_seleccionado['username']}")
             # Guardar los cambios en el archivo JSON
@@ -362,7 +387,9 @@ def menu():
                 usuarios_existentes = []
             for usuario in usuarios_existentes:
                 ultimo_uso = usuario["ultimoUso"]
-                tiempo_ultimo_uso_actual = time.mktime(time.strptime(ultimo_uso, "%d/%m/%Y %H:%M:%S"))
+                tiempo_ultimo_uso_actual = time.mktime(
+                    time.strptime(ultimo_uso, "%d/%m/%Y %H:%M:%S")
+                    )
                 tiempo_actual = time.time()
                 if tiempo_actual - tiempo_ultimo_uso_actual >= 7200:
                     usuario["seUso"] = "No"
